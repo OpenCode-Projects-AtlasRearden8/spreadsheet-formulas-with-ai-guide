@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5 · Dates Without Dread · Spreadsheet Formulas, With a Friend</title>
+<meta name="description" content="A beginner manual on learning spreadsheet formulas (VLOOKUP, SUMIF, dates, pivot tables) with an AI chat window. Plain English, tested examples, by Asdale Dynamics, LLC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><a class="title" href="index.html">
+Spreadsheet Formulas, With a Friend &#183; learning spreadsheet formulas with AI
+</a></header>
+<main>
+<nav class="chapters"><strong>Chapters</strong><a href="01-asking-in-plain-english.html">1 · Asking in Plain English</a><br><a href="02-reading-and-fixing-formulas.html">2 · Reading and Fixing a Formula</a><br><a href="03-vlookup.html">3 · VLOOKUP, Without the Fear</a><br><a href="04-sumif-and-countif.html">4 · SUMIF and COUNTIF</a><br><a class="here" href="05-dates.html">5 · Dates Without Dread</a><br><a href="06-pivot-tables.html">6 · Pivot Tables Without the Panic</a><br><a href="07-cleaning-messy-columns.html">7 · Cleaning Messy Columns</a><br><a href="08-follow-up-questions.html">8 · Asking Follow-Up Questions</a><br><a href="09-cheatsheet.html">9 · Prompt Patterns Cheat Sheet</a><br><a href="index.html">Welcome</a></nav>
+<article>
+<h1 id="chapter-5-dates-without-dread">Chapter 5 · Dates Without Dread</h1>
+<p><em>If formulas have a bogeyman, it&rsquo;s dates. &ldquo;1/5/2026&rdquo; looks like text, but
+your spreadsheet secretly treats it as a number — and once you see that,
+dates stop being scary and start being useful.</em></p>
+<h2 id="the-big-secret-dates-are-numbers-wearing-costumes">The big secret: dates are numbers wearing costumes</h2>
+<p>In Excel, Google Sheets, and LibreOffice Calc, a date is just a number —
+how many days since some long-ago start point — displayed as a date. Try
+it if you like: if June&rsquo;s order date cell B2 is a real date, then</p>
+<pre><code>=B2 + 20
+</code></pre>
+<p>gives back <strong>2026-01-25</strong>. Add 20 days and you&rsquo;re twenty days later. That
+secret explains almost everything about dates:</p>
+<ul>
+<li>Arithmetic &ldquo;<em>just works</em>&rdquo; on well-formed date cells (<code>B3-B2</code> is days
+  between them).</li>
+<li>Sorting by date is really sorting by number.</li>
+<li>&ldquo;What&rsquo;s wrong with my date formula&rdquo; is usually &ldquo;this cell is secretly
+  text, not a number.&rdquo;</li>
+</ul>
+<h2 id="your-first-useful-date-formulas">Your first useful date formulas</h2>
+<pre><code>=B2 + 30                    → 30 days after Jan 5 → 2026-02-04
+=B13 - B2                   → Jan 25 minus Jan 5    → 20 (days)
+=DAYS(B13, B2)              → the same 20, spelled out
+=EOMONTH(B2, 0)             → the last day of B2's month → 2026-01-31
+=TEXT(B2, &quot;mmmm yyyy&quot;)     → the wordy label → &quot;January 2026&quot;
+=YEAR(B2), =MONTH(B2), =WEEKDAY(B2)
+</code></pre>
+<p>Every one of these is verifiable by hand with 12 rows of January data —
+that&rsquo;s the point of the small dataset all book long. Ask your AI first
+(&ldquo;with my sheet map: B = Date…&rdquo;), then confirm the result yourself.</p>
+<h2 id="the-real-life-trap-152026-typed-into-the-wrong-place">The real-life trap: <code>1/5/2026</code> typed into the wrong place</h2>
+<p>Here&rsquo;s the classic, and it hits nurses&rsquo; shift logs as hard as candle
+orders. Someone types <code>1/5/2026</code> in a spreadsheet set to European
+international formatting, or a cell was pre-formatted as Text, or the
+value came from a cut-and-paste from a website. Same-looking cell, four
+possible realities:</p>
+<ul>
+<li>A real date, meaning <strong>January 5, 2026</strong></li>
+<li>A real date, meaning <strong>May 1, 2026</strong> (column formatted differently)</li>
+<li>The words &ldquo;1/5/2026&rdquo; sitting there as text (left-aligned!)</li>
+<li>Empty, with the source typing evicted by auto-correct</li>
+</ul>
+<p>Three warnings that catch most cases:</p>
+<ol>
+<li><strong>Alignment is the tell.</strong> Real numbers (and real dates) line up
+   right; text lines up left in a fresh General-formatted column.</li>
+<li><strong><code>=B2+1</code> either works</strong> (real date), <strong>or produces an error or a
+   strange number</strong> (text).</li>
+<li><strong><code>=ISNUMBER(B2)</code></strong> returns <code>TRUE</code> for a true date, <code>FALSE</code> for the
+   impostor. This humble check may be the most useful formula in this
+   book you&rsquo;ve never needed before.</li>
+</ol>
+<p>If you find impostor text-dates, don&rsquo;t fix 12 cells by re-typing; ask the
+AI (&ldquo;make these text cells real dates&rdquo;), which will hand you a <code>DATEVALUE</code>
+formula or a one-click Data → Split text/column settings approach —
+whatever is right for your program.</p>
+<blockquote>
+<p><strong>Fictional footnote:</strong> all dates used in this book are from a fictional
+January 2026 dataset in <code>examples/orders.csv</code>. No real orders, no real
+people, no personal data.</p>
+</blockquote>
+<h2 id="sumifs-with-a-date-window-the-useful-one">SUMIFS with a date window: the useful one</h2>
+<p>The classic real-life question: <em>&ldquo;how much between January 11 and January
+20?&rdquo;</em> A date range is just two conditions on the same Date column. With
+your sheet map and the fix-it-routine from <a href="02-reading-and-fixing-formulas.html">Chapter 2</a>:</p>
+<pre><code>=SUMIFS(I2:I13, B2:B13, &quot;&gt;=&quot;&amp;DATE(2026,1,11), B2:B13, &quot;&lt;=&quot;&amp;DATE(2026,1,20))
+</code></pre>
+<p>Translation: <em>add line totals of the rows whose date is on or after
+January 11, 2026 <strong>and</strong> on or before January 20, 2026.</em> That&rsquo;s orders
+1004–1009 — six of them — and the answer is <strong>253.00</strong> (a <code>SUMIFS</code> our
+test suite computes independently, too). The <code>"&gt;="&amp;DATE(...)</code> sandwich
+wall of symbols looks worse than it is: the first piece, <code>"&gt;="&amp;DATE(...)</code>,
+is AI-written for you, and you only need to know that it means &ldquo;on or
+after.&rdquo;</p>
+<blockquote>
+<p>If this is your first time seeing <code>DATE(2026,1,11)</code>: it builds a date
+from your own year, month, day — safer than typing <code>1/11/2026</code> into a
+formula, whose meaning can change based on your computer&rsquo;s country
+settings (the very trap from earlier).</p>
+</blockquote>
+<h2 id="a-friendly-closing-word-about-this-chapter">A friendly closing word about this chapter</h2>
+<p>Dates have a reputation for being <em>technical</em>, and this chapter is long —
+but here is the entire take-home list:</p>
+<ul>
+<li>a date is a number in disguise,</li>
+<li><code>+1</code> steps a day, subtracting gives a gap in days,</li>
+<li><code>ISNUMBER</code> sniffs impostors,</li>
+<li><code>SUMIFS</code> with two date conditions is how you say &ldquo;between two dates.&rdquo;</li>
+</ul>
+<p>Everything else you look up when you need it, ideally in the chat window,
+in plain English — that&rsquo;s the method of this whole book.</p>
+<p>Onward to <a href="06-pivot-tables.html">Chapter 6</a>, pivot tables without panic.</p>
+</article>
+<footer class="pager"><a href="04-sumif-and-countif.html">&#8592; 4 · SUMIF and COUNTIF</a><a href="06-pivot-tables.html"> &#8594;6 · Pivot Tables Without the Panic</a></footer>
+</main>
+<footer class="colophon">
+Spreadsheet Formulas, With a Friend &#8212; a beginner manual by
+<a href="https://dylanasdale.github.io">Asdale Dynamics, LLC</a>.
+Markdown source in <code>docs/</code>; this site rebuilds with
+<code>python3 scripts/build_site.py</code>. No data leaves your machine.
+</footer>
+</body>
+</html>

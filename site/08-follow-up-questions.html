@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8 · Asking Follow-Up Questions · Spreadsheet Formulas, With a Friend</title>
+<meta name="description" content="A beginner manual on learning spreadsheet formulas (VLOOKUP, SUMIF, dates, pivot tables) with an AI chat window. Plain English, tested examples, by Asdale Dynamics, LLC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><a class="title" href="index.html">
+Spreadsheet Formulas, With a Friend &#183; learning spreadsheet formulas with AI
+</a></header>
+<main>
+<nav class="chapters"><strong>Chapters</strong><a href="01-asking-in-plain-english.html">1 · Asking in Plain English</a><br><a href="02-reading-and-fixing-formulas.html">2 · Reading and Fixing a Formula</a><br><a href="03-vlookup.html">3 · VLOOKUP, Without the Fear</a><br><a href="04-sumif-and-countif.html">4 · SUMIF and COUNTIF</a><br><a href="05-dates.html">5 · Dates Without Dread</a><br><a href="06-pivot-tables.html">6 · Pivot Tables Without the Panic</a><br><a href="07-cleaning-messy-columns.html">7 · Cleaning Messy Columns</a><br><a class="here" href="08-follow-up-questions.html">8 · Asking Follow-Up Questions</a><br><a href="09-cheatsheet.html">9 · Prompt Patterns Cheat Sheet</a><br><a href="index.html">Welcome</a></nav>
+<article>
+<h1 id="chapter-8-asking-follow-up-questions">Chapter 8 · Asking Follow-Up Questions</h1>
+<p><em>Here is the truest thing in this book: the first formula the AI gives
+you is a draft. A good first draft, most of the time — but a draft. The
+magic isn&rsquo;t in the first answer. It&rsquo;s in the little conversation that
+comes after.</em></p>
+<h2 id="the-loop-small-and-friendly">The loop (small and friendly)</h2>
+<p>Every chapter so far has quietly used the same three-beat loop. Naming it
+now, so it&rsquo;s a tool instead of a vibe:</p>
+<ol>
+<li><strong>Ask in plain English</strong> (Chapter 1&rsquo;s template).</li>
+<li><strong>Read what came back, out loud</strong> (Chapter 2&rsquo;s skill) and <em>verify</em>
+   against a hand-checked expectation.</li>
+<li><strong>Follow up</strong> — and this beat has more range than you&rsquo;d guess.</li>
+</ol>
+<p>That third beat is its own skill, and it&rsquo;s the difference between people
+who feel &ldquo;AI does spreadsheets for me&rdquo; and people who feel
+&ldquo;AI and I do spreadsheets together.&rdquo;</p>
+<h2 id="the-follow-up-menu">The follow-up menu</h2>
+<p>Keep this list in your back pocket. Every one of these is a full, complete
+follow-up question, ready to paste:</p>
+<table>
+<thead>
+<tr>
+<th>When…</th>
+<th>Ask…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The number looks wrong</td>
+<td>&ldquo;I got X but I expected Y by my own count. Here&rsquo;s my sheet map. What could cause that?&rdquo;</td>
+</tr>
+<tr>
+<td>The formula works but you don&rsquo;t trust it</td>
+<td>&ldquo;Explain what this formula does, part by part, in plain English — and tell me one manual check I could do.&rdquo;</td>
+</tr>
+<tr>
+<td>You didn&rsquo;t understand the explanation</td>
+<td>&ldquo;Explain that again, but simpler — like to someone who&rsquo;s never used a spreadsheet before.&rdquo;</td>
+</tr>
+<tr>
+<td>You want to learn, not just finish</td>
+<td>&ldquo;Why is that the best way? What&rsquo;s the second-best way, and when would I prefer it?&rdquo;</td>
+</tr>
+<tr>
+<td>It gave an error</td>
+<td>&ldquo;This formula gives <code>#N/A</code>. What usually causes that? Give me a yes/no checklist to narrow it down.&rdquo;</td>
+</tr>
+<tr>
+<td>You&rsquo;re asked something you can&rsquo;t answer</td>
+<td>&ldquo;I don&rsquo;t know what that means. Could you show me exactly how to find out, step by step?&rdquo;</td>
+</tr>
+<tr>
+<td>You&rsquo;ve fixed it and want confidence</td>
+<td>&ldquo;How would I test whether my fixed formula is truly correct before I trust it for the whole sheet?&rdquo;</td>
+</tr>
+<tr>
+<td>It&rsquo;s <em>almost</em> what you want</td>
+<td>&ldquo;That&rsquo;s close — but instead of ___, can it do ___? Keep the same columns.&rdquo;</td>
+</tr>
+<tr>
+<td>You&rsquo;re feeling lost inside the sheet</td>
+<td>&ldquo;List every formula currently touching cell I15, and what each is for.&rdquo;</td>
+</tr>
+<tr>
+<td>You want to protect future-you</td>
+<td>&ldquo;What could break this sheet later, and how would I notice right away if it did?&rdquo;</td>
+</tr>
+</tbody>
+</table>
+<p>Print that table, or keep a copy of this file open. Nine times out of ten,
+the question you need is already written down above.</p>
+<h2 id="what-follow-ups-look-like-in-real-life">What follow-ups look like in real life</h2>
+<p>A small, true-to-life conversation from the making of this very chapter&rsquo;s
+examples. June (fictional candle shop, remember), after getting her first
+working VLOOKUP:</p>
+<blockquote>
+<p><strong>June:</strong> =VLOOKUP(D2, Catalog!$A$2:$B$5, 2, FALSE) works on all but two
+rows, which give #N/A. I double-checked and both products ARE in the
+catalog. Why just those two?</p>
+<p><strong>AI:</strong> If only <em>some</em> rows miss, the products are in the catalog, but
+those two cells are <em>visibly different from inside</em> — most often extra
+leading/trailing spaces, or a double space inside. Try =LEN(D2) filled
+down next to the misses, and compare with the same-length values…
+actually first, simply try =D2=Catalog!$A$4 for one failing row. If it
+says FALSE, we&rsquo;ve found a formatting difference and I&rsquo;ll walk you
+through cleaning the column.</p>
+<p><strong>June:</strong> It says FALSE.</p>
+<p><strong>AI:</strong> Then it&rsquo;s almost certainly stray whitespace. In a new column K,
+fill down =TRIM(Clean version)…</p>
+</blockquote>
+<p>…which is exactly how <a href="07-cleaning-messy-columns.html">Chapter 7</a> got its
+specimen, and Chapter 2&rsquo;s fixing routine&rsquo;s step 4 got its example of a
+hypothesis. Three follow-ups and June went from &ldquo;the AI gave me a broken
+formula&rdquo; to &ldquo;we found it, together&rdquo; — and she can now recognize that
+particular bug on her own forever.</p>
+<p>Notice two qualities in her follow-ups worth stealing:</p>
+<ul>
+<li>She <strong>reports the difference between expectation and reality</strong>
+  (&ldquo;works on all but two rows&rdquo; — not &ldquo;it&rsquo;s broken&rdquo;).</li>
+<li>She <strong>feeds the AI the check result it asked for</strong> (&ldquo;It says FALSE&rdquo;)
+  instead of restarting from scratch.</li>
+</ul>
+<h2 id="when-the-ai-is-confidently-wrong">When the AI is confidently wrong</h2>
+<p>It happens; it&rsquo;s the price of a fast free intern with infinite patience.
+Your defenses, in order:</p>
+<ol>
+<li><strong>Your hand check</strong> (this book&rsquo;s drumbeat): 12 rows you can count on
+   your fingers is your <em>immunity</em>.</li>
+<li><strong>Ask it to show its work:</strong> &ldquo;Show me, with my data, which specific
+   rows you added for that total.&rdquo; If it lists rows, add them yourself.
+   If it can&rsquo;t list rows, that&rsquo;s information too.</li>
+<li><strong>Ask for a second method:</strong> &ldquo;Can you compute this a different way —
+   a different function or even a different order of operations — so I
+   can check one against the other?&rdquo; Two roads agreeing is solid
+   evidence.</li>
+<li><strong>Restart with fresh framing:</strong> sometimes a stubborn wrong answer
+   (yours or its) clears with &ldquo;Let&rsquo;s start over; I&rsquo;ll describe the whole
+   situation again from the beginning.&rdquo; One clean restate beats five
+   rounds of patching.</li>
+</ol>
+<p>And a meta-defense: <strong>when you undertand <em>why</em> a formula works, wrong
+answers can&rsquo;t hurt you</strong> — that&rsquo;s why Chapters 2 through 7 each taught the
+&ldquo;read it aloud&rdquo; habit before the fancy stuff. You&rsquo;re not memorizing
+spreadsheet factoids; you&rsquo;re collecting readable, checkable tools you can
+rebuild in any sheet, with any AI, forever.</p>
+<h2 id="one-last-follow-up-you-should-always-feel-free-to-ask">One last follow-up you should always feel free to ask</h2>
+<p>Nobody says this in tutorials, so I will: <strong>&ldquo;Can you slow down?
+I&rsquo;m following but I want to make sure I&rsquo;ve got it before we move on.&rdquo;</strong></p>
+<p>Any decent AI chat handles that parenthetically — and so would any decent
+human teacher. This is your learning experience, sized to your Tuesday,
+and neither the spreadsheet nor the AI is grading you.</p>
+<p>Onward to <a href="09-cheatsheet.html">Chapter 9</a> — the single-page keeper: prompt
+patterns and a formula quick-reference.</p>
+</article>
+<footer class="pager"><a href="07-cleaning-messy-columns.html">&#8592; 7 · Cleaning Messy Columns</a><a href="09-cheatsheet.html"> &#8594;9 · Prompt Patterns Cheat Sheet</a></footer>
+</main>
+<footer class="colophon">
+Spreadsheet Formulas, With a Friend &#8212; a beginner manual by
+<a href="https://dylanasdale.github.io">Asdale Dynamics, LLC</a>.
+Markdown source in <code>docs/</code>; this site rebuilds with
+<code>python3 scripts/build_site.py</code>. No data leaves your machine.
+</footer>
+</body>
+</html>

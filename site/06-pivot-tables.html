@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6 · Pivot Tables Without the Panic · Spreadsheet Formulas, With a Friend</title>
+<meta name="description" content="A beginner manual on learning spreadsheet formulas (VLOOKUP, SUMIF, dates, pivot tables) with an AI chat window. Plain English, tested examples, by Asdale Dynamics, LLC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><a class="title" href="index.html">
+Spreadsheet Formulas, With a Friend &#183; learning spreadsheet formulas with AI
+</a></header>
+<main>
+<nav class="chapters"><strong>Chapters</strong><a href="01-asking-in-plain-english.html">1 · Asking in Plain English</a><br><a href="02-reading-and-fixing-formulas.html">2 · Reading and Fixing a Formula</a><br><a href="03-vlookup.html">3 · VLOOKUP, Without the Fear</a><br><a href="04-sumif-and-countif.html">4 · SUMIF and COUNTIF</a><br><a href="05-dates.html">5 · Dates Without Dread</a><br><a class="here" href="06-pivot-tables.html">6 · Pivot Tables Without the Panic</a><br><a href="07-cleaning-messy-columns.html">7 · Cleaning Messy Columns</a><br><a href="08-follow-up-questions.html">8 · Asking Follow-Up Questions</a><br><a href="09-cheatsheet.html">9 · Prompt Patterns Cheat Sheet</a><br><a href="index.html">Welcome</a></nav>
+<article>
+<h1 id="chapter-6-pivot-tables-without-the-panic">Chapter 6 · Pivot Tables Without the Panic</h1>
+<p><em>Pivot tables have a reputation as Expert Territory. They aren&rsquo;t. A pivot
+table is a machine that answers &ldquo;group by X, total Y&rdquo; — the same question
+you already solved with SUMIF in <a href="04-sumif-and-countif.html">Chapter 4</a>, just
+for every group at once, and without writing any formulas.</em></p>
+<h2 id="the-job-in-one-breath">The job, in one breath</h2>
+<p>June wants: <strong>&ldquo;How much revenue did each category bring in?&rdquo;</strong> Here is the
+answer, as a pivot table:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Sum of Line Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Candles</td>
+<td>216.00</td>
+</tr>
+<tr>
+<td>Gift Sets</td>
+<td>294.00</td>
+</tr>
+<tr>
+<td>Refills</td>
+<td>74.00</td>
+</tr>
+</tbody>
+</table>
+<p>And when the same question gets asked with a different lens — <em>&ldquo;what about
+by region?&rdquo;</em> — the click-path is identical:</p>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Sum of Line Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Midwest</td>
+<td>193.00</td>
+</tr>
+<tr>
+<td>Northeast</td>
+<td>79.00</td>
+</tr>
+<tr>
+<td>South</td>
+<td>114.00</td>
+</tr>
+<tr>
+<td>West</td>
+<td>198.00</td>
+</tr>
+</tbody>
+</table>
+<p>Two details worth pausing on, both reassuring:</p>
+<ul>
+<li>Every table here sums to <strong>584.00</strong> — the grand total from
+  <a href="01-asking-in-plain-english.html">Chapter 1</a>. When different views of the
+  data agree like that, you&rsquo;ve almost certainly set everything up right.</li>
+<li>Nothing about making them required you to type a formula. The pivot
+  table is the <em>viewing</em> tool; SUMIF is the <em>building</em> tool. Both live in
+  your toolbox now.</li>
+</ul>
+<h2 id="the-four-boxes-in-plain-english">The four boxes, in plain English</h2>
+<p>Google Sheets: select your data (A1:H13), then <strong>Insert → Pivot table</strong>
+→ <em>New sheet</em> — and you meet four little boxes:</p>
+<table>
+<thead>
+<tr>
+<th>Box</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rows</strong></td>
+<td>&ldquo;Group by…&rdquo; — one row per distinct value (each Category, each Customer, …)</td>
+</tr>
+<tr>
+<td><strong>Columns</strong></td>
+<td>&ldquo;…and split across…&rdquo; — an optional second lens; leave it empty today</td>
+</tr>
+<tr>
+<td><strong>Values</strong></td>
+<td>&ldquo;…and show me…&rdquo; — the thing that gets summed, counted, or averaged</td>
+</tr>
+<tr>
+<td><strong>Filters</strong></td>
+<td>&ldquo;…but only for rows where…&rdquo; — optional spotlight</td>
+</tr>
+</tbody>
+</table>
+<p>Four boxes. Plain English names. For June&rsquo;s category revenue, fill in
+exactly two of them:</p>
+<ol>
+<li><strong>Rows:</strong> <code>Category</code></li>
+<li><strong>Values:</strong> <code>Line Total</code>, summarized as <strong>SUM</strong></li>
+</ol>
+<p>That&rsquo;s the entire table. (Excel calls the boxes by the same names in the
+&ldquo;PivotTable Fields&rdquo; pane; LibreOffice Calc calls the feature DataPilot and
+hides the same four fields behind friendlier labels once you know to find
+<strong>Insert → Pivot Table</strong>.)</p>
+<p>The written guide you&rsquo;re reading now is the slow, careful version —
+the <em>click-by-click</em> version is genuinely better taught beside your AI,
+and the prompt for that is one Chapter 1 shape you already know:</p>
+<pre><code>I'm about to make my first pivot table in Google Sheets. My data is in
+A1:H13; Category is column G, Line Total is column I (=E*F, filled all
+the way down). I want: Rows = Category, Values = Sum of Line Total.
+Confirm that's the right setup, walk me through the click path one
+step at a time, and warn me about any common beginner pitfalls before
+I click anything.
+</code></pre>
+<p>Two honest answers you&rsquo;re likely to get, so you&rsquo;re not surprised:</p>
+<ol>
+<li><strong>Your Line Total column must be filled all the way down.</strong> A blank at
+   the bottom silently shortens the sums; a pivot &ldquo;finding&rdquo; your last row
+   is a classic reason for a total that looks 80% right.</li>
+<li><strong>Start your selection at the header row (A1),</strong> not the data rows, so
+   the pivot finds column labels and shows friendly names instead of
+   &ldquo;Column G.&rdquo;</li>
+</ol>
+<h2 id="why-this-doesnt-require-panic">Why this doesn&rsquo;t require panic</h2>
+<p>Pivot tables <em>sound</em> like they rewrite your data. They really, truly
+don&rsquo;t. A few facts, so you can relax:</p>
+<ul>
+<li>The output is a summary that lives on <strong>its own sheet</strong> (or a corner of
+  this one). Your <code>orders</code> data is untouched.</li>
+<li>Deleting costs nothing (right-click → Delete → whole sheet, or Ctrl+Z).</li>
+<li>Updating costs nothing except a <em>refresh</em> when the data changes (Sheets
+  revises pivots on reload; Excel has an obvious &ldquo;Refresh&rdquo; button).</li>
+<li>They coexist peacefully with formulas — <code>SUMIF</code> calculations on one
+  sheet, a pivot on another, never arguing.</li>
+</ul>
+<p>This satisfies our rule from <a href="index.html">Chapter 0</a>: <strong>keep a way to check
+by hand.</strong> Your hand-check here is beautiful: the pivot&rsquo;s grand total
+should equal <code>=SUM(I2:I13)</code> from your orders sheet — <strong>584.00</strong> each.
+You get to <em>watch</em> two independent tools agree, which is worth more than
+any tutorial.</p>
+<h2 id="when-to-pivot-when-to-sumif">When to pivot, when to SUMIF</h2>
+<table>
+<thead>
+<tr>
+<th>You want…</th>
+<th>Best tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One group&rsquo;s total (&ldquo;Gift Sets only&rdquo;)</td>
+<td><code>SUMIF</code></td>
+</tr>
+<tr>
+<td>Every group&rsquo;s totals, stacked</td>
+<td><strong>Pivot table</strong></td>
+</tr>
+<tr>
+<td>Counts across several cut-lines (&ldquo;orders → count per region and per category&rdquo;)</td>
+<td><strong>Pivot table</strong></td>
+</tr>
+<tr>
+<td>A number to feed the <em>next</em> formula (e.g., &ldquo;Gift Sets share of total&rdquo;)</td>
+<td><code>SUMIF</code>, plainly in a cell</td>
+</tr>
+</tbody>
+</table>
+<p>That last row is quiet, practical wisdom. Pivots are great to <em>read</em> but
+awkward to build on top of. <code>SUMIF</code> is less impressive to look at, but its
+answer sits in a nice ordinary cell you can reference freely. Chapter 4 got
+you both, which is exactly why it came first.</p>
+<p>Onward to <a href="07-cleaning-messy-columns.html">Chapter 7</a>, where the data gets
+messy in all the ways real data does.</p>
+</article>
+<footer class="pager"><a href="05-dates.html">&#8592; 5 · Dates Without Dread</a><a href="07-cleaning-messy-columns.html"> &#8594;7 · Cleaning Messy Columns</a></footer>
+</main>
+<footer class="colophon">
+Spreadsheet Formulas, With a Friend &#8212; a beginner manual by
+<a href="https://dylanasdale.github.io">Asdale Dynamics, LLC</a>.
+Markdown source in <code>docs/</code>; this site rebuilds with
+<code>python3 scripts/build_site.py</code>. No data leaves your machine.
+</footer>
+</body>
+</html>

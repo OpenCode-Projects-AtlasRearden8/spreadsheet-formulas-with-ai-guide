@@ -1,0 +1,52 @@
+[
+  {
+    "slug": "01-asking-in-plain-english",
+    "title": "1 \u00b7 Asking in Plain English",
+    "file": "01-asking-in-plain-english.html"
+  },
+  {
+    "slug": "02-reading-and-fixing-formulas",
+    "title": "2 \u00b7 Reading and Fixing a Formula",
+    "file": "02-reading-and-fixing-formulas.html"
+  },
+  {
+    "slug": "03-vlookup",
+    "title": "3 \u00b7 VLOOKUP, Without the Fear",
+    "file": "03-vlookup.html"
+  },
+  {
+    "slug": "04-sumif-and-countif",
+    "title": "4 \u00b7 SUMIF and COUNTIF",
+    "file": "04-sumif-and-countif.html"
+  },
+  {
+    "slug": "05-dates",
+    "title": "5 \u00b7 Dates Without Dread",
+    "file": "05-dates.html"
+  },
+  {
+    "slug": "06-pivot-tables",
+    "title": "6 \u00b7 Pivot Tables Without the Panic",
+    "file": "06-pivot-tables.html"
+  },
+  {
+    "slug": "07-cleaning-messy-columns",
+    "title": "7 \u00b7 Cleaning Messy Columns",
+    "file": "07-cleaning-messy-columns.html"
+  },
+  {
+    "slug": "08-follow-up-questions",
+    "title": "8 \u00b7 Asking Follow-Up Questions",
+    "file": "08-follow-up-questions.html"
+  },
+  {
+    "slug": "09-cheatsheet",
+    "title": "9 \u00b7 Prompt Patterns Cheat Sheet",
+    "file": "09-cheatsheet.html"
+  },
+  {
+    "slug": "index",
+    "title": "Welcome",
+    "file": "index.html"
+  }
+]

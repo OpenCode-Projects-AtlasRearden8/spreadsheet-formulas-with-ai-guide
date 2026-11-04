@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1 · Asking in Plain English · Spreadsheet Formulas, With a Friend</title>
+<meta name="description" content="A beginner manual on learning spreadsheet formulas (VLOOKUP, SUMIF, dates, pivot tables) with an AI chat window. Plain English, tested examples, by Asdale Dynamics, LLC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><a class="title" href="index.html">
+Spreadsheet Formulas, With a Friend &#183; learning spreadsheet formulas with AI
+</a></header>
+<main>
+<nav class="chapters"><strong>Chapters</strong><a class="here" href="01-asking-in-plain-english.html">1 · Asking in Plain English</a><br><a href="02-reading-and-fixing-formulas.html">2 · Reading and Fixing a Formula</a><br><a href="03-vlookup.html">3 · VLOOKUP, Without the Fear</a><br><a href="04-sumif-and-countif.html">4 · SUMIF and COUNTIF</a><br><a href="05-dates.html">5 · Dates Without Dread</a><br><a href="06-pivot-tables.html">6 · Pivot Tables Without the Panic</a><br><a href="07-cleaning-messy-columns.html">7 · Cleaning Messy Columns</a><br><a href="08-follow-up-questions.html">8 · Asking Follow-Up Questions</a><br><a href="09-cheatsheet.html">9 · Prompt Patterns Cheat Sheet</a><br><a href="index.html">Welcome</a></nav>
+<article>
+<h1 id="chapter-1-asking-in-plain-english">Chapter 1 · Asking in Plain English</h1>
+<p><em>You already know how to do this. Not with spreadsheets — with people.
+&ldquo;You know how I keep losing my keys? Help me find a way to always know
+where they are.&rdquo; That&rsquo;s describing a problem in plain English, and it&rsquo;s
+exactly how you talk to AI about formulas.</em></p>
+<p>The single biggest misconception beginners carry is that they need to learn
+&ldquo;a language&rdquo; — formulas, functions, that sideways mountain <code>=C2+B2</code> —
+before they&rsquo;re allowed to ask for help. In 2026, you don&rsquo;t. The AI writes
+the formula. Your job is to <em>describe the need</em>, then <em>read and check</em> what
+comes back.</p>
+<h2 id="what-a-formula-request-for-a-human-sounds-like">What a &ldquo;formula request&rdquo; for a human sounds like</h2>
+<p>Imagine June&rsquo;s candle spreadsheet from <a href="index.html">the intro</a>. You want to
+know how much money January brought in. What do you tell a helpful human?
+Probably:</p>
+<blockquote>
+<p>&ldquo;Add up the money from all 12 orders — quantity times unit price for each
+row, and then total all of those.&rdquo;</p>
+</blockquote>
+<p>Notice what&rsquo;s in that sentence:</p>
+<ul>
+<li><strong>The goal</strong> (total money from January)</li>
+<li><strong>The math rules</strong> (quantity × unit price per row, then sum)</li>
+<li><strong>The scope</strong> (all 12 orders)</li>
+</ul>
+<p>A good AI prompt is basically that sentence, plus one more thing: <strong>a map
+of your sheet.</strong></p>
+<h2 id="step-1-give-the-ai-a-map-of-your-sheet">Step 1: Give the AI a map of your sheet</h2>
+<p>The AI can&rsquo;t see your spreadsheet (unless you paste a screenshot or upload a
+file). So it doesn&rsquo;t know whether &ldquo;Price&rdquo; is in column F or Q, or whether
+the data starts in row 1 or row 500. Fix this by describing your sheet in
+one compact block, like this:</p>
+<blockquote>
+<p>My sheet has headers in row 1 and data in rows 2–13.
+Columns:
+A = OrderID, B = Date, C = Customer, D = Product,
+E = Qty, F = UnitPrice, G = Category, H = Region.</p>
+</blockquote>
+<p>Paste that at the top of your chat, keep it pinned while you work, and
+<strong>every formula the AI writes for the rest of the session will line up with
+your real columns.</strong> Later chapters call this the <em>sheet map</em>.</p>
+<h2 id="step-2-state-the-want-in-plain-english">Step 2: State the want in plain English</h2>
+<p>Now finish your request:</p>
+<blockquote>
+<p>My sheet has headers in row 1 and data in rows 2–13.
+Columns: A = OrderID, B = Date, C = Customer, D = Product,
+E = Qty, F = UnitPrice, G = Category, H = Region.</p>
+<p>In column I, I want each order&rsquo;s line total (Qty × UnitPrice).
+Below the data, I want the total of all line totals.</p>
+</blockquote>
+<p>Sit with this for a second, because it&rsquo;s the whole book in miniature. You
+did not write <code>=E2*F2</code>. You described a <em>job</em>, the way you&rsquo;d ask a coworker
+sitting next to you.</p>
+<p><strong>What comes back</strong> should look like this (column I, next to your data):</p>
+<pre><code>I2:  =E2*F2
+</code></pre>
+<p>…filled down through I13, and then, whichever empty cell you asked for:</p>
+<pre><code>I15: =SUM(I2:I13)
+</code></pre>
+<p>Type those in (or let the AI&rsquo;s click-by-click instructions walk you), and
+you&rsquo;ll see <strong>584.00</strong> — every dollar and cent January earned, 12 orders
+added up.</p>
+<p>The test suite that ships with this project checks that number by
+re-adding the data from scratch; see <code>tests/test_examples.py</code> if you&rsquo;re
+curious how a book <em>knows</em> its examples are right.</p>
+<h2 id="the-prompt-template-worth-memorizing">The prompt template worth memorizing</h2>
+<p>You can copy this one. It has four parts, and they never change:</p>
+<blockquote>
+<p>I have a spreadsheet with [what it is].
+[Sheet map: headers in row ?, data rows ?–?, column letters = names.]
+I want [the goal, in your own words].
+Please give me the formula to put in [where], and tell me if I need to
+fill it down or adjust any cell references. Explain each part briefly.</p>
+</blockquote>
+<p>Four parts: <em>context, map, want, deliverables.</em> You&rsquo;ll see variations all
+through this manual, but the bones are always those four.</p>
+<h2 id="weak-prompt-strong-prompt">Weak prompt, strong prompt</h2>
+<p>Compare:</p>
+<table>
+<thead>
+<tr>
+<th>Weak</th>
+<th>Strong</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&ldquo;Make a formula.&rdquo;</td>
+<td>&ldquo;Add Qty × UnitPrice in column I for rows 2–13.&rdquo;</td>
+<td>The AI can&rsquo;t read minds; columns and rows matter.</td>
+</tr>
+<tr>
+<td>&ldquo;Do a VLOOKUP&rdquo;</td>
+<td>&ldquo;Look up each product&rsquo;s price from my catalog sheet and put it in column J.&rdquo;</td>
+<td>Names the data to look up <em>and</em> where to put it.</td>
+</tr>
+<tr>
+<td>&ldquo;Fix this: =SUMIF(&hellip;)&rdquo;</td>
+<td>&ldquo;This =SUMIF was supposed to be 294.00 but I get 0. My sheet map is [paste]. What&rsquo;s wrong?&rdquo;</td>
+<td>Gives intent + expected result + map. Chapter 2 lives here.</td>
+</tr>
+</tbody>
+</table>
+<p>The strong column isn&rsquo;t &ldquo;formal.&rdquo; It&rsquo;s just <em>the details a helpful human
+would need.</em> If you&rsquo;d hate to ask a coworker &ldquo;do the thing,&rdquo; don&rsquo;t do it to
+your AI either.</p>
+<h2 id="quick-note-excel-sheets-or-libreoffice">Quick note: Excel, Sheets, or LibreOffice?</h2>
+<p>Formulas are nearly identical in Excel, Google Sheets, and LibreOffice Calc,
+and our examples all work in all three. Where they <em>do</em> differ (mostly
+cross-sheet references and a few newer functions like <code>XLOOKUP</code>), the
+chapter will flag it in a small note. If your AI knows which program you&rsquo;re
+using, mention it in the prompt — &ldquo;I&rsquo;m using Google Sheets&rdquo; — because that
+lets it pick the right syntax for you.</p>
+<h2 id="your-first-worked-homework-optional-low-stakes">Your first worked homework (optional, low stakes)</h2>
+<p>Open <code>examples/orders.csv</code> and try, without looking ahead:</p>
+<ol>
+<li>Ask your AI (with the sheet map) for a formula in column I for line
+   totals. Check two rows by hand: row for OrderID <strong>1010</strong> should be
+   3 × 42.00 = <strong>126.00</strong>, and OrderID <strong>1002</strong> should be 1 × 18.50.</li>
+<li>Ask for the grand total in an empty cell. It should be <strong>584.00</strong>.</li>
+<li>If either number came back wrong, tell the AI exactly that: <em>&ldquo;I got
+   ___ but I expected ___ using manual math. Here&rsquo;s my sheet map: …&rdquo;</em></li>
+</ol>
+<p>If all three went smoothly, you&rsquo;ve already done the core loop of this
+entire book. On to <a href="02-reading-and-fixing-formulas.html">Chapter 2</a> — reading
+what the AI wrote, out loud.</p>
+</article>
+<footer class="pager"><span></span><a href="02-reading-and-fixing-formulas.html"> &#8594;2 · Reading and Fixing a Formula</a></footer>
+</main>
+<footer class="colophon">
+Spreadsheet Formulas, With a Friend &#8212; a beginner manual by
+<a href="https://dylanasdale.github.io">Asdale Dynamics, LLC</a>.
+Markdown source in <code>docs/</code>; this site rebuilds with
+<code>python3 scripts/build_site.py</code>. No data leaves your machine.
+</footer>
+</body>
+</html>

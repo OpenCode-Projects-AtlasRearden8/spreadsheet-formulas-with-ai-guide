@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4 · SUMIF and COUNTIF · Spreadsheet Formulas, With a Friend</title>
+<meta name="description" content="A beginner manual on learning spreadsheet formulas (VLOOKUP, SUMIF, dates, pivot tables) with an AI chat window. Plain English, tested examples, by Asdale Dynamics, LLC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><a class="title" href="index.html">
+Spreadsheet Formulas, With a Friend &#183; learning spreadsheet formulas with AI
+</a></header>
+<main>
+<nav class="chapters"><strong>Chapters</strong><a href="01-asking-in-plain-english.html">1 · Asking in Plain English</a><br><a href="02-reading-and-fixing-formulas.html">2 · Reading and Fixing a Formula</a><br><a href="03-vlookup.html">3 · VLOOKUP, Without the Fear</a><br><a class="here" href="04-sumif-and-countif.html">4 · SUMIF and COUNTIF</a><br><a href="05-dates.html">5 · Dates Without Dread</a><br><a href="06-pivot-tables.html">6 · Pivot Tables Without the Panic</a><br><a href="07-cleaning-messy-columns.html">7 · Cleaning Messy Columns</a><br><a href="08-follow-up-questions.html">8 · Asking Follow-Up Questions</a><br><a href="09-cheatsheet.html">9 · Prompt Patterns Cheat Sheet</a><br><a href="index.html">Welcome</a></nav>
+<article>
+<h1 id="chapter-4-sumif-and-countif">Chapter 4 · SUMIF and COUNTIF</h1>
+<p><em>SUM adds everything. SUMIF adds the ones you want. COUNTIF counts the
+ones you want. That&rsquo;s the entire difference, and it&rsquo;s why these two
+functions will quietly become the ones you reach for most.</em></p>
+<h2 id="the-everyday-question">The everyday question</h2>
+<p>Looking at June&rsquo;s January orders again: not just <strong>&ldquo;how much revenue?&rdquo;</strong>
+(chapter 1 answered that, <strong>584.00</strong>) but things like:</p>
+<ul>
+<li><em>How much came from Gift Sets?</em> (a single line — the question every
+  small business asks when restocking)</li>
+<li><em>How many orders were candles?</em></li>
+<li><em>How much revenue from the Midwest?</em></li>
+</ul>
+<p>Notice each question has the same skeleton: <strong>add/count <em>something</em>, but
+only where <em>some condition</em> holds.</strong> SUMIF and COUNTIF are built for
+exactly that shape.</p>
+<h2 id="asking-the-ai-with-the-sheet-map">Asking the AI, with the sheet map</h2>
+<pre><code>My sheet has headers in row 1 and data in rows 2–13.
+A = OrderID, B = Date, C = Customer, D = Product, E = Qty,
+F = UnitPrice, G = Category, H = Region
+I = Line Total (=E*F, filled down)
+
+Give me three formulas:
+1. Total line-total revenue where Category is &quot;Gift Sets&quot;
+2. Count of orders where Category is &quot;Candles&quot;
+3. Total line-total revenue where Region is &quot;Midwest&quot;
+Put each in a separate empty cell in row 16, like 16A/16B/16C labels
+described to me. I'm using Google Sheets.
+</code></pre>
+<p>What comes back:</p>
+<pre><code>=SUMIF(G2:G13, &quot;Gift Sets&quot;, I2:I13)      → the Gift Sets revenue
+=COUNTIF(G2:G13, &quot;Candles&quot;)              → how many candle orders
+=SUMIF(H2:H13, &quot;Midwest&quot;, I2:I13)        → the Midwest revenue
+</code></pre>
+<p>And the expected answers (which our project&rsquo;s test suite also computes
+independently):</p>
+<table>
+<thead>
+<tr>
+<th>Formula</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SUMIF Gift Sets</td>
+<td><strong>294.00</strong> (orders 84.00 + 42.00 + 42.00 + 126.00)</td>
+</tr>
+<tr>
+<td>COUNTIF Candles</td>
+<td><strong>5</strong></td>
+</tr>
+<tr>
+<td>SUMIF Midwest</td>
+<td><strong>193.00</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="reading-one-aloud">Reading one aloud</h2>
+<p><code>=SUMIF(G2:G13, "Gift Sets", I2:I13)</code>, translated:</p>
+<ol>
+<li>Walk down G2:G13 (the Category column)…</li>
+<li>…stopping where the cell says exactly <code>Gift Sets</code>…</li>
+<li>…and when you find one, add that row&rsquo;s value from I2:I13.</li>
+</ol>
+<p>The shape is always the same:</p>
+<pre><code>=SUMIF( &lt;range to test&gt;, &lt;test&gt;, &lt;range to add&gt; )
+=COUNTIF( &lt;range to test&gt;, &lt;test&gt; )
+</code></pre>
+<p><code>COUNTIF</code> has no third argument — counting doesn&rsquo;t need an &ldquo;add&rdquo; range.</p>
+<h2 id="the-one-pitfall-worth-knowing-exactly-what-matches">The one pitfall worth knowing: exactly what &ldquo;matches&rdquo;</h2>
+<p><code>SUMIF</code>/<code>COUNTIF</code> match on the <em>exact text</em>, ignoring capitalization but
+<strong>not</strong> ignoring extra spaces. So <code>Gift Sets</code> (trailing space) is <em>not</em>
+<code>Gift Sets</code>, and <code>gift sets</code> <em>is</em> <code>Gift Sets</code>. Chapter 2 met this gremlin;
+<a href="07-cleaning-messy-columns.html">Chapter 7</a> evicts it for good.</p>
+<p>If a SUMIF returns 0 when you &ldquo;know&rdquo; it shouldn&rsquo;t, tell the AI exactly
+that (Chapter 2&rsquo;s fixing routine), and it&rsquo;ll likely ask to see the exact
+text in one of the tested cells. Often it&rsquo;s a space in hiding.</p>
+<h2 id="two-conditions-at-once-sumifs-countifs">Two conditions at once: SUMIFS / COUNTIFS</h2>
+<p>&ldquo;Yes, but Gift Sets <strong>and</strong> the West region&rdquo; — that&rsquo;s <code>SUMIFS</code> (with an
+S). The argument order flips (the <em>sum range</em> comes first):</p>
+<pre><code>=SUMIFS(I2:I13, G2:G13, &quot;Gift Sets&quot;, H2:H13, &quot;West&quot;)
+</code></pre>
+<p>Read aloud: <em>&ldquo;From the line totals, add rows where Category is Gift Sets
+<strong>and</strong> Region is West.&rdquo;</em> That&rsquo;s order 1010, worth <strong>126.00</strong>. The S
+versions take condition pairs like a list of rules: range/what,
+range2/what2, and so on.</p>
+<blockquote>
+<p><strong>Sanity-check it:</strong> our test suite computes this same SUMIFS and
+confirms 126.00 exactly. When your sheet says 126.00 too, you&rsquo;ve
+understood it.</p>
+</blockquote>
+<h2 id="one-more-useful-shape-cells-whose-totals-you-want-for-every-value">One more useful shape: cells whose totals you want <em>for every</em> value</h2>
+<p>Later you&rsquo;ll want not just Gift Sets but <strong>every category at once</strong>, each
+with its total next to it. Two options, both worth knowing:</p>
+<ol>
+<li><strong>One SUMIF per label.</strong> In a small block, type each category
+   (Candles, Gift Sets, Refills), and next to each one the AI&rsquo;s formula
+   pointing at its row. Yes, three explicit rows, three formulas (or a
+   single filled-down one with a <code>$</code> range and a reference to the label
+   cell).</li>
+<li><strong>A pivot table.</strong> Which is literally purpose-built for exactly this
+   shape of question, and is <a href="06-pivot-tables.html">Chapter 6</a>.</li>
+</ol>
+<p>You&rsquo;ll meet the category revenue table in full (Candles <strong>216.00</strong>, Gift
+Sets <strong>294.00</strong>, Refills <strong>74.00</strong>) in Chapter 6.</p>
+<p>Next: <a href="05-dates.html">Chapter 5</a> — dates without dread.</p>
+</article>
+<footer class="pager"><a href="03-vlookup.html">&#8592; 3 · VLOOKUP, Without the Fear</a><a href="05-dates.html"> &#8594;5 · Dates Without Dread</a></footer>
+</main>
+<footer class="colophon">
+Spreadsheet Formulas, With a Friend &#8212; a beginner manual by
+<a href="https://dylanasdale.github.io">Asdale Dynamics, LLC</a>.
+Markdown source in <code>docs/</code>; this site rebuilds with
+<code>python3 scripts/build_site.py</code>. No data leaves your machine.
+</footer>
+</body>
+</html>

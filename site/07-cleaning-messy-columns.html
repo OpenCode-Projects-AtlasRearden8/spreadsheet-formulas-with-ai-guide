@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7 · Cleaning Messy Columns · Spreadsheet Formulas, With a Friend</title>
+<meta name="description" content="A beginner manual on learning spreadsheet formulas (VLOOKUP, SUMIF, dates, pivot tables) with an AI chat window. Plain English, tested examples, by Asdale Dynamics, LLC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><a class="title" href="index.html">
+Spreadsheet Formulas, With a Friend &#183; learning spreadsheet formulas with AI
+</a></header>
+<main>
+<nav class="chapters"><strong>Chapters</strong><a href="01-asking-in-plain-english.html">1 · Asking in Plain English</a><br><a href="02-reading-and-fixing-formulas.html">2 · Reading and Fixing a Formula</a><br><a href="03-vlookup.html">3 · VLOOKUP, Without the Fear</a><br><a href="04-sumif-and-countif.html">4 · SUMIF and COUNTIF</a><br><a href="05-dates.html">5 · Dates Without Dread</a><br><a href="06-pivot-tables.html">6 · Pivot Tables Without the Panic</a><br><a class="here" href="07-cleaning-messy-columns.html">7 · Cleaning Messy Columns</a><br><a href="08-follow-up-questions.html">8 · Asking Follow-Up Questions</a><br><a href="09-cheatsheet.html">9 · Prompt Patterns Cheat Sheet</a><br><a href="index.html">Welcome</a></nav>
+<article>
+<h1 id="chapter-7-cleaning-messy-columns">Chapter 7 · Cleaning Messy Columns</h1>
+<p><em>Real spreadsheets have real mess. Not hero-movie mess — small, boring,
+human mess: extra spaces, surprise capitalization, one column holding
+three facts, the same customer existing twice as two people. This chapter
+is a calm toolkit for exactly that mess, and your AI is a natural at it.</em></p>
+<h2 id="the-specimen">The specimen</h2>
+<p>Open <code>examples/messy_names.csv</code>. Seven rows in one column (&ldquo;MessyName&rdquo;),
+typed by seven different people who were each in a hurry:</p>
+<pre><code>&quot;  maya   chen &quot;
+&quot;LUIS ORTEGA&quot;
+&quot;priya patel &quot;
+&quot;June  Tanaka&quot;
+&quot;    Omar Haddad&quot;
+&quot;omar   haddad &quot;
+&quot;GRACE   okafor  &quot;
+</code></pre>
+<p>Two things jump out if you look with spreadsheet eyes:</p>
+<ol>
+<li><strong>Beauty faults</strong> — leading spaces, trailing spaces, rages of capital —
+   all styles, all fixable in one pass.</li>
+<li><strong>One real problem</strong>: rows 5 and 6 are the same person,
+   <code>Omar Haddad</code>, typed two different ways. Cleaning isn&rsquo;t cosmetic —
+   it&rsquo;s what lets COUNTIF, SUMIF, and deduping see them as one.</li>
+</ol>
+<h2 id="the-three-cleaning-formulas-that-handle-90-of-cases">The three cleaning formulas that handle 90% of cases</h2>
+<p>Freed by the sheet-map prompt pattern from <a href="01-asking-in-plain-english.html">Chapter 1</a>:</p>
+<pre><code>My sheet has one column: headers in row 1, data in A2:A8 — messy names
+like &quot;  maya   chen &quot;. Give me formulas to put in B2 (filled down)
+that produce clean names: no extra leading/trailing spaces, no doubled
+inner spaces, and consistent capitalization. Explain each in one line.
+</code></pre>
+<p>You&rsquo;ll get some blend of the classic trio:</p>
+<table>
+<thead>
+<tr>
+<th>Formula</th>
+<th>What it does by hand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>=TRIM(A2)</code></td>
+<td>Trims leading <em>and</em> trailing spaces, and squashes runs of inner spaces to one</td>
+</tr>
+<tr>
+<td><code>=PROPER(A2)</code></td>
+<td>Capitalizes each word: <code>maya chen</code> → <code>Maya Chen</code></td>
+</tr>
+<tr>
+<td><code>=SUBSTITUTE(A2,"  "," ")</code></td>
+<td>A surgical replace — rarely needed <em>by hand</em> since TRIM already collapses inner spaces</td>
+</tr>
+</tbody>
+</table>
+<p>Combining them yourself would look like
+<code>=PROPER(TRIM(A2))</code> (inner-after-outer is fine, and your AI will write it
+for you anyway). The honest beginner move is simple: <strong>type <code>=PROPER(TRIM(A2))</code>
+in B2, fill down, and look at the column gently.</strong></p>
+<p>That produces our clean list for the seven rows:</p>
+<pre><code>Maya Chen
+Luis Ortega
+Priya Patel
+June Tanaka
+Omar Haddad
+Omar Haddad      ← same person, now seen as the same person
+Grace Okafor
+</code></pre>
+<p>And COUNTIF is now equipped to tell the truth:</p>
+<pre><code>=COUNTIF(B2:B8, &quot;Omar Haddad&quot;)      → 2
+</code></pre>
+<p>Before cleaning, that count was invisibly split between <code>"    Omar Haddad"</code>
+and <code>"omar   haddad "</code> and the total said 1 (or worse, if the AI&rsquo;s tests
+were looking for capitalization variants). Multiply that by every column
+in every sheet you&rsquo;ll ever touch, and you see why cleaning is worth an
+entire chapter.</p>
+<h2 id="the-deduping-honesty-deserves-its-own-moment">The deduping honesty deserves its own moment</h2>
+<p>With clean names, finding duplicates becomes the fun kind of problem.
+Two AI-assistable moves:</p>
+<p><strong>Move 1 — flag duplicates next to the data:</strong></p>
+<pre><code>=IF(COUNTIF($B$2:B2, B2)&gt;1, &quot;dupe&quot;, &quot;first&quot;)
+</code></pre>
+<p>Read aloud (with help if needed, <a href="02-reading-and-fixing-formulas.html">Chapter 2</a>):
+<em>&ldquo;As I fill this down, it counts how many times this name appears in the
+rows up to and including this one; more than once means &lsquo;dupe&rsquo;.&rdquo;</em>
+Fill down and the second <code>Omar Haddad</code> reads <code>dupe</code>. Nothing is deleted;
+you see everything and decide.</p>
+<p><strong>Move 2 — keep only firsts in one pass, when you&rsquo;re ready:</strong>
+Data → Remove duplicates (Sheets / Excel) or Data → More Filters →
+Standard Filter → <em>no duplications</em> (LibreOffice), applied to column B.
+Run it once, check the count dropped from 7 rows to <strong>6</strong>, then delete
+column B if you no longer need the helper.</p>
+<blockquote>
+<p><strong>The sheets rule of thumb.</strong> Don&rsquo;t destructively clean in columns
+people care about <em>until</em> you&rsquo;ve checked the cleaned version beside the
+original. Duplicate-to-column-B (or duplicate the sheet — see our friend
+from <a href="02-reading-and-fixing-formulas.html">Chapter 2</a>), sanity-check, then
+replace. Slow is smooth.</p>
+</blockquote>
+<h2 id="merging-first-and-last-names-into-one-column">Merging first and last names into one column</h2>
+<p>The other classic mess is its mirror image: a spreadsheet where names are
+<em>bisected</em> into <code>First Name</code> / <code>Last Name</code> columns, and <em>now</em> you wish
+they were one. The glue is:</p>
+<pre><code>=A2 &amp; &quot; &quot; &amp; B2
+</code></pre>
+<p>The <code>&amp;</code> is the &ldquo;glue these two pieces of text together&rdquo; symbol, and <code>" "</code>
+in the middle is the space between them. So <code>A2 = Maya</code>, <code>B2 = Chen</code> →
+<code>Maya Chen</code>. Your AI will sometimes write this as
+<code>=CONCATENATE(A2," ",B2)</code> or <code>=TEXTJOIN(" ",TRUE,A2:B2)</code> — all the same
+job, different dialects.</p>
+<h2 id="when-a-mess-is-bigger-than-three-formulas">When a mess is bigger than three formulas</h2>
+<p>Three formulas handle 90% of column mess. The other 10% is where you say
+the true sentence of this whole book out loud:</p>
+<blockquote>
+<p><strong>&ldquo;Here&rsquo;s what column A looks like, here&rsquo;s what I want it to look like,
+here are three examples of rows — write me the formula or walk me
+through the tool for the rest.&rdquo;</strong></p>
+</blockquote>
+<p>Examples include: names stuck in a single column as <code>"Tanaka, June"</code>;
+product codes like <code>CANDLE-3PK-2026</code> where you only want the middle; a
+date column that says <code>Jan 5, 2026</code> as <em>words</em>, not a date. Messes like
+these have tools — &ldquo;Split text to columns,&rdquo; Flash Fill (Excel),
+<code>TEXTBEFORE</code>/<code>TEXTAFTER</code> (newer Excel/Sheets), <code>REGEXEXTRACT</code> (Sheets) —
+and knowing <em>the name of the kind of tool</em> matters less than describing
+the want and letting the AI pick. That&rsquo;s <a href="01-asking-in-plain-english.html">Chapter 1</a>&rsquo;s
+job, and Chapter 8 is about what comes after.</p>
+</article>
+<footer class="pager"><a href="06-pivot-tables.html">&#8592; 6 · Pivot Tables Without the Panic</a><a href="08-follow-up-questions.html"> &#8594;8 · Asking Follow-Up Questions</a></footer>
+</main>
+<footer class="colophon">
+Spreadsheet Formulas, With a Friend &#8212; a beginner manual by
+<a href="https://dylanasdale.github.io">Asdale Dynamics, LLC</a>.
+Markdown source in <code>docs/</code>; this site rebuilds with
+<code>python3 scripts/build_site.py</code>. No data leaves your machine.
+</footer>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9 · Prompt Patterns Cheat Sheet · Spreadsheet Formulas, With a Friend</title>
+<meta name="description" content="A beginner manual on learning spreadsheet formulas (VLOOKUP, SUMIF, dates, pivot tables) with an AI chat window. Plain English, tested examples, by Asdale Dynamics, LLC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><a class="title" href="index.html">
+Spreadsheet Formulas, With a Friend &#183; learning spreadsheet formulas with AI
+</a></header>
+<main>
+<nav class="chapters"><strong>Chapters</strong><a href="01-asking-in-plain-english.html">1 · Asking in Plain English</a><br><a href="02-reading-and-fixing-formulas.html">2 · Reading and Fixing a Formula</a><br><a href="03-vlookup.html">3 · VLOOKUP, Without the Fear</a><br><a href="04-sumif-and-countif.html">4 · SUMIF and COUNTIF</a><br><a href="05-dates.html">5 · Dates Without Dread</a><br><a href="06-pivot-tables.html">6 · Pivot Tables Without the Panic</a><br><a href="07-cleaning-messy-columns.html">7 · Cleaning Messy Columns</a><br><a href="08-follow-up-questions.html">8 · Asking Follow-Up Questions</a><br><a class="here" href="09-cheatsheet.html">9 · Prompt Patterns Cheat Sheet</a><br><a href="index.html">Welcome</a></nav>
+<article>
+<h1 id="chapter-9-prompt-patterns-cheat-sheet">Chapter 9 · Prompt Patterns Cheat Sheet</h1>
+<p><em>A one-pager to keep open in a second window (or print). Same 12-row
+example data all book long: <code>examples/orders.csv</code>.</em></p>
+<h2 id="the-master-template">The master template</h2>
+<blockquote>
+<p>I have a spreadsheet with [what it is].
+[Sheet map: headers in row ?, data in rows ?–?, columns = names.]
+I want to [the goal, in your own words].
+Please give me [the formula / the click path], where to put it, and a
+short plain-English explanation of each part. I&rsquo;m using
+[Excel / Google Sheets / LibreOffice Calc].</p>
+</blockquote>
+<h2 id="sheet-map-to-copy-once-per-session">Sheet map to copy once per session</h2>
+<pre><code>My sheet has headers in row 1 and data in rows 2–13.
+A = OrderID, B = Date, C = Customer, D = Product, E = Qty,
+F = UnitPrice, G = Category, H = Region
+(I = Line Total = E*F, filled down)
+</code></pre>
+<h2 id="chapter-1-plain-english-requests">Chapter 1 — plain-English requests</h2>
+<ul>
+<li>&ldquo;Add Qty × UnitPrice per row, then total all rows.&rdquo; → <code>=E2*F2</code>, <code>=SUM(I2:I13)</code> → <strong>584.00</strong></li>
+<li>Weak ask → strong ask: name the <strong>columns, rows, and destination</strong>.</li>
+</ul>
+<h2 id="chapter-2-reading-fixing">Chapter 2 — reading &amp; fixing</h2>
+<ul>
+<li>Read formula aloud: <code>=FUNCTION(argument, argument)</code>.</li>
+<li><code>$A$2:$B$5</code> = &ldquo;pin this exact range, don&rsquo;t shift on fill-down.&rdquo;</li>
+<li>Fixing routine: <strong>intent → reality (exact error/number) → sheet map →
+  diagnosis → hand-check.</strong></li>
+<li>Error glossary: <code>#NAME?</code> typo · <code>#N/A</code> not found · <code>#REF!</code> pointed at
+  deleted cell · <code>#VALUE!</code> math on a word · <code>#DIV/0!</code> divided by zero.</li>
+</ul>
+<h2 id="chapter-3-vlookup">Chapter 3 — VLOOKUP</h2>
+<ul>
+<li><code>=VLOOKUP(D2, Catalog!$A$2:$B$5, 2, FALSE)</code> → Beeswax Pillars → <strong>24.00</strong></li>
+<li>The <code>2</code> counts columns <strong>inside the range</strong>; <code>FALSE</code> = exact match only.</li>
+<li><code>#N/A</code> on SOME rows → invisible extra spaces (Chapter 7).</li>
+<li>Kinder face: <code>=IFERROR(VLOOKUP(...), "not in catalog")</code>.</li>
+</ul>
+<h2 id="chapter-4-sumif-countif-sumifs">Chapter 4 — SUMIF / COUNTIF / SUMIFS</h2>
+<ul>
+<li><code>=SUMIF(G2:G13,"Gift Sets",I2:I13)</code> → <strong>294.00</strong></li>
+<li><code>=COUNTIF(G2:G13,"Candles")</code> → <strong>5</strong></li>
+<li><code>=SUMIF(H2:H13,"Midwest",I2:I13)</code> → <strong>193.00</strong></li>
+<li><code>=SUMIFS(I2:I13,G2:G13,"Gift Sets",H2:H13,"West")</code> → <strong>126.00</strong></li>
+<li>Matching is case-insensitive but space-sensitive.</li>
+</ul>
+<h2 id="chapter-5-dates">Chapter 5 — dates</h2>
+<pre><code>=B2+20                      → 2026-01-25
+=DAYS(B13,B2)               → 20
+=EOMONTH(B2,0)              → 2026-01-31
+=TEXT(B2,&quot;mmmm yyyy&quot;)       → &quot;January 2026&quot;
+=ISNUMBER(B2)               → TRUE only if B2 is a real date
+=SUMIFS(I2:I13, B2:B13, &quot;&gt;=&quot;&amp;DATE(2026,1,11), B2:B13, &quot;&lt;=&quot;&amp;DATE(2026,1,20))
+                            → orders Jan 11–20 → 253.00 (6 orders)
+</code></pre>
+<h2 id="chapter-6-pivot-tables">Chapter 6 — pivot tables</h2>
+<ul>
+<li>Select <strong>A1:H13</strong> → Insert → Pivot table → New sheet.</li>
+<li><strong>Rows</strong> = Category · <strong>Values</strong> = Line Total, SUM → Candles 216.00 ·
+  Gift Sets 294.00 · Refills 74.00. (By region: Midwest 193 · Northeast
+  79 · South 114 · West 198.)</li>
+<li>Pivot doesn&rsquo;t touch your data; refresh after edits; grand total
+  cross-checks <code>=SUM(I2:I13)</code> = 584.00.</li>
+</ul>
+<h2 id="chapter-7-cleaning">Chapter 7 — cleaning</h2>
+<ul>
+<li><code>=PROPER(TRIM(A2))</code> — the 90% cleanup, filled down.</li>
+<li><code>=IF(COUNTIF($B$2:B2,B2)&gt;1,"dupe","first")</code> — flag dupes, don&rsquo;t delete.</li>
+<li><code>=A2&amp;" "&amp;B2</code> — glue first + last name. (Watch the space between quotes.)</li>
+<li>Duplicate → clean the copy → check → replace.</li>
+</ul>
+<h2 id="chapter-8-follow-up-prompts">Chapter 8 — follow-up prompts</h2>
+<ul>
+<li>&ldquo;I got X, expected Y by hand. Sheet map: …&rdquo;</li>
+<li>&ldquo;Explain part by part, then tell me one manual check.&rdquo;</li>
+<li>&ldquo;Show which specific rows you summed.&rdquo;</li>
+<li>&ldquo;Compute it a different way so I can cross-check.&rdquo;</li>
+<li>&ldquo;Let&rsquo;s start over — I&rsquo;ll describe everything again.&rdquo;</li>
+<li>&ldquo;Can you slow down?&rdquo; (always allowed)</li>
+</ul>
+<h2 id="the-five-habits-when-all-else-fades">The five habits (when all else fades)</h2>
+<ol>
+<li>Map the sheet before asking.</li>
+<li>Read formulas aloud; <code>$</code> means pinned.</li>
+<li>Hand-check one number per formula.</li>
+<li>Clean a copy, never the original.</li>
+<li>Follow up — drafts become good formulas in the second message.</li>
+</ol>
+<hr />
+<p><em>Manual by Asdale Dynamics, LLC — <a href="https://dylanasdale.github.io">dylanasdale.github.io</a>.
+Companion guide: <strong>Spreadsheet Comfort Guide</strong> (interface comfort), by the
+same friendly publisher. Tested examples: <code>examples/</code> + <code>tests/</code>, verified
+per <code>STATUS.md</code>.</em></p>
+</article>
+<footer class="pager"><a href="08-follow-up-questions.html">&#8592; 8 · Asking Follow-Up Questions</a><a href="index.html"> &#8594;Welcome</a></footer>
+</main>
+<footer class="colophon">
+Spreadsheet Formulas, With a Friend &#8212; a beginner manual by
+<a href="https://dylanasdale.github.io">Asdale Dynamics, LLC</a>.
+Markdown source in <code>docs/</code>; this site rebuilds with
+<code>python3 scripts/build_site.py</code>. No data leaves your machine.
+</footer>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3 · VLOOKUP, Without the Fear · Spreadsheet Formulas, With a Friend</title>
+<meta name="description" content="A beginner manual on learning spreadsheet formulas (VLOOKUP, SUMIF, dates, pivot tables) with an AI chat window. Plain English, tested examples, by Asdale Dynamics, LLC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><a class="title" href="index.html">
+Spreadsheet Formulas, With a Friend &#183; learning spreadsheet formulas with AI
+</a></header>
+<main>
+<nav class="chapters"><strong>Chapters</strong><a href="01-asking-in-plain-english.html">1 · Asking in Plain English</a><br><a href="02-reading-and-fixing-formulas.html">2 · Reading and Fixing a Formula</a><br><a class="here" href="03-vlookup.html">3 · VLOOKUP, Without the Fear</a><br><a href="04-sumif-and-countif.html">4 · SUMIF and COUNTIF</a><br><a href="05-dates.html">5 · Dates Without Dread</a><br><a href="06-pivot-tables.html">6 · Pivot Tables Without the Panic</a><br><a href="07-cleaning-messy-columns.html">7 · Cleaning Messy Columns</a><br><a href="08-follow-up-questions.html">8 · Asking Follow-Up Questions</a><br><a href="09-cheatsheet.html">9 · Prompt Patterns Cheat Sheet</a><br><a href="index.html">Welcome</a></nav>
+<article>
+<h1 id="chapter-3-vlookup-without-the-fear">Chapter 3 · VLOOKUP, Without the Fear</h1>
+<p><em>VLOOKUP has a reputation. It&rsquo;s the formula with its own fan club and its
+own anxiety support group. Here&rsquo;s the secret: it&rsquo;s just &ldquo;look up one thing
+in a table, and bring back something next to it.&rdquo; You do this every time
+you search your contacts for a name and read off the phone number.</em></p>
+<h2 id="the-job-in-plain-english">The job, in plain English</h2>
+<p>June&rsquo;s order sheet (<code>examples/orders.csv</code>) lists products by name, and her
+price list lives in a second sheet (<code>examples/catalog.csv</code>):</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>Product</td>
+<td>UnitPrice</td>
+<td>Category</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>Candle Trio Gift Box</td>
+<td>42.00</td>
+<td>Gift Sets</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>Soy Wax Refill Kit</td>
+<td>18.50</td>
+<td>Refills</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>Beeswax Pillars</td>
+<td>24.00</td>
+<td>Candles</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>Tea Light Sampler</td>
+<td>12.00</td>
+<td>Candles</td>
+</tr>
+</tbody>
+</table>
+<p>The classic everyday need: <em>&ldquo;In my order sheet, for each product, look up
+its current catalog price next to it, so I can check the order sheet&rsquo;s
+prices against the master list.&rdquo;</em></p>
+<p>That&rsquo;s VLOOKUP&rsquo;s entire job: <strong>V = vertical</strong> (it searches down a column),
+<strong>lookup</strong> (it finds your value, then brings back a neighbor).</p>
+<h2 id="ask-the-ai-with-your-two-sheet-map">Ask the AI with your two-sheet map</h2>
+<pre><code>I have two sheets.
+
+Orders sheet: headers in row 1, data in rows 2–13.
+  A = OrderID, B = Date, C = Customer, D = Product, E = Qty,
+  F = UnitPrice, G = Category, H = Region
+
+Catalog sheet: headers in row 1, data in rows 2–5.
+  A = Product, B = UnitPrice
+
+In Orders, column J, look up each product's UnitPrice from the
+Catalog sheet (match on Product name). I'm using Google Sheets.
+Give me the formula for J2 and tell me if I need to fill it down.
+</code></pre>
+<p>What comes back:</p>
+<pre><code>J2:  =VLOOKUP(D2, Catalog!$A$2:$B$5, 2, FALSE)
+</code></pre>
+<p>Fill it down J3…J13 and every order row now shows its catalog price.</p>
+<h2 id="reading-it-aloud-and-the-two-scary-numbers">Reading it aloud — and the two scary numbers</h2>
+<p><em>=VLOOKUP(D2, Catalog!$A$2:$B$5, 2, FALSE)</em>:</p>
+<ol>
+<li>Take the product name in <strong>D2</strong>.</li>
+<li>Search column A of the <strong>Catalog</strong> sheet, rows 2–5 (the <code>$</code> pins the
+   range so it doesn&rsquo;t shift when you fill down — see <a href="02-reading-and-fixing-formulas.html">Chapter 2</a>).</li>
+<li>When you find it, come back with the value from the <strong>2nd</strong> column of
+   that range (A is 1st, B is 2nd — so this is the UnitPrice).</li>
+<li><code>FALSE</code> means <strong>exact match only.</strong></li>
+</ol>
+<p>Two things to memorize — and this is the whole of VLOOKUP&rsquo;s hard part:</p>
+<ul>
+<li><strong>The <code>2</code></strong> is a <em>column number within the range you gave it</em>, not
+  spreadsheet column B. If your range were <code>A:C</code>, the <code>2</code> would still be
+  &ldquo;the second column of the range,&rdquo; which would be column B.</li>
+<li><strong>The <code>FALSE</code></strong> insists on an exact match. Leave it off (or say <code>TRUE</code>)
+  and the function happily hands you the <em>nearest wrong answer</em>. Your AI
+  writing <code>FALSE</code> for you is a small kindness.</li>
+</ul>
+<h2 id="verify-one-by-hand">Verify one by hand</h2>
+<p>Order <strong>1008</strong> is Omar Haddad, Beeswax Pillars. J column lookup for that
+row should read <strong>24.00</strong> — exactly the Beeswax price from the catalog.
+Check one cell against the price list with your eyes and you now trust the
+other eleven.</p>
+<h2 id="when-vlookup-gives-you-na">When VLOOKUP gives you <code>#N/A</code></h2>
+<p><code>#N/A</code> after a lookup isn&rsquo;t a scolding. It&rsquo;s the most polite error in
+spreadsheet land: <em>&ldquo;I looked; I found nothing.&rdquo;</em> (See the glossary in
+<a href="02-reading-and-fixing-formulas.html">Chapter 2</a>.) In practice it almost
+always means one of:</p>
+<table>
+<thead>
+<tr>
+<th>Cause</th>
+<th>Example</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spelling/spacing mismatch</td>
+<td>Order says <code>Beeswax Pillars</code> (trailing space), catalog says <code>Beeswax Pillars</code></td>
+<td>Clean the column — <a href="07-cleaning-messy-columns.html">Chapter 7</a></td>
+</tr>
+<tr>
+<td>It&rsquo;s genuinely absent</td>
+<td>Order sheet contains &ldquo;Wick Trimmer Set&rdquo; but catalog doesn&rsquo;t</td>
+<td>Add it to the catalog, or accept and flag the row</td>
+</tr>
+<tr>
+<td>Wrong first column</td>
+<td>Catalog&rsquo;s lookup column is actually B</td>
+<td>Point the formula at the true leftmost column</td>
+</tr>
+</tbody>
+</table>
+<p>And this is where AI shines — a typical honest exchange goes:</p>
+<blockquote>
+<p><strong>You:</strong> My J column gets <code>#N/A</code> in some rows with this formula:
+<code>=VLOOKUP(D2, Catalog!$A$2:$B$5, 2, FALSE)</code>. D13 is <code>Tea Light Sampler</code>
+and the catalog definitely has it. Why only some rows?</p>
+<p><strong>AI:</strong> If it&rsquo;s only <em>some</em> rows, the value itself exists — those
+lookup cells probably have invisible differences: extra spaces, or the
+text sitting in the catalog with different capitalization. In a blank
+cell, try <code>=D2=Catalog!A2</code> style checks for two of the failing pairs…
+actually, simpler: run <code>=LEN(D13)</code> on the failing cell and tell me the
+number. If it&rsquo;s longer than <code>Tea Light Sampler</code>, we&rsquo;ll count the
+suspects.</p>
+<p><strong>You:</strong> LEN says 19.</p>
+<p><strong>AI:</strong> <code>Tea Light Sampler</code> is 17 characters. Two extra ones —
+almost certainly leading or trailing spaces. Let&rsquo;s clean the column;
+want a formula for K2 like <code>=TRIM(D2)</code> to fill down, or are you up for
+fixing it in place?</p>
+</blockquote>
+<p>(That cleanup is exactly <a href="07-cleaning-messy-columns.html">Chapter 7</a>.)</p>
+<blockquote>
+<p><strong>The #N/A with eyes.</strong> If you&rsquo;d rather see friendly text than <code>#N/A</code>,
+ask the AI: <em>&ldquo;wrap it so an unmatched lookup shows &lsquo;not in catalog&rsquo;
+instead of #N/A.&rdquo;</em> You&rsquo;ll get an IFERROR wrapper:
+<code>=IFERROR(VLOOKUP(D2, Catalog!$A$2:$B$5, 2, FALSE), "not in catalog")</code>.
+Same logic, kinder face.</p>
+</blockquote>
+<h2 id="sidebar-xlookup-the-younger-sibling">Sidebar: XLOOKUP, the younger sibling</h2>
+<p>If you&rsquo;re on recent Excel or Google Sheets, you may also meet
+<code>XLOOKUP</code>, which does the same job with clearer arguments (lookup range,
+return range, no &ldquo;2nd column&rdquo; counting). The AI can give you either one —
+and VLOOKUP remains worth learning because <em>half the spreadsheets on Earth</em>
+use it. Try asking the AI for both versions of this formula and see them
+side by side; it&rsquo;s a genuinely instructive five minutes.</p>
+<p>Next: <a href="04-sumif-and-countif.html">Chapter 4</a> — SUMIF and COUNTIF, the pair
+you&rsquo;ll reach for most often.</p>
+</article>
+<footer class="pager"><a href="02-reading-and-fixing-formulas.html">&#8592; 2 · Reading and Fixing a Formula</a><a href="04-sumif-and-countif.html"> &#8594;4 · SUMIF and COUNTIF</a></footer>
+</main>
+<footer class="colophon">
+Spreadsheet Formulas, With a Friend &#8212; a beginner manual by
+<a href="https://dylanasdale.github.io">Asdale Dynamics, LLC</a>.
+Markdown source in <code>docs/</code>; this site rebuilds with
+<code>python3 scripts/build_site.py</code>. No data leaves your machine.
+</footer>
+</body>
+</html>

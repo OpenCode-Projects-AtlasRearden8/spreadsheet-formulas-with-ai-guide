@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2 · Reading and Fixing a Formula · Spreadsheet Formulas, With a Friend</title>
+<meta name="description" content="A beginner manual on learning spreadsheet formulas (VLOOKUP, SUMIF, dates, pivot tables) with an AI chat window. Plain English, tested examples, by Asdale Dynamics, LLC.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><a class="title" href="index.html">
+Spreadsheet Formulas, With a Friend &#183; learning spreadsheet formulas with AI
+</a></header>
+<main>
+<nav class="chapters"><strong>Chapters</strong><a href="01-asking-in-plain-english.html">1 · Asking in Plain English</a><br><a class="here" href="02-reading-and-fixing-formulas.html">2 · Reading and Fixing a Formula</a><br><a href="03-vlookup.html">3 · VLOOKUP, Without the Fear</a><br><a href="04-sumif-and-countif.html">4 · SUMIF and COUNTIF</a><br><a href="05-dates.html">5 · Dates Without Dread</a><br><a href="06-pivot-tables.html">6 · Pivot Tables Without the Panic</a><br><a href="07-cleaning-messy-columns.html">7 · Cleaning Messy Columns</a><br><a href="08-follow-up-questions.html">8 · Asking Follow-Up Questions</a><br><a href="09-cheatsheet.html">9 · Prompt Patterns Cheat Sheet</a><br><a href="index.html">Welcome</a></nav>
+<article>
+<h1 id="chapter-2-reading-and-fixing-a-formula">Chapter 2 · Reading and Fixing a Formula</h1>
+<p><em>First: you will never be fluent in formulas from reading this once. Nobody
+is. The trick isn&rsquo;t memorization — it&rsquo;s reading a formula the way you read a
+to-do list, and having a routine for when something comes back wrong.</em></p>
+<h2 id="reading-a-formula-out-loud">Reading a formula out loud</h2>
+<p>Take June&rsquo;s revenue formula from <a href="01-asking-in-plain-english.html">Chapter 1</a>:</p>
+<pre><code>=SUM(I2:I13)
+</code></pre>
+<p>Read it like a sentence: <em>&ldquo;Sum — add up — the range from cell I2 to cell
+I13.&rdquo;</em> That&rsquo;s all it says. It&rsquo;s not magic; it&rsquo;s a to-do list with cell
+addresses.</p>
+<p>Now <code>=E2*F2</code>: <em>&ldquo;Times the qty in E2 by the price in F2.&rdquo;</em> The pattern is
+always:</p>
+<pre><code>= FUNCTION( arguments )
+</code></pre>
+<ul>
+<li>The <strong><code>=</code></strong> means &ldquo;this cell does a job.&rdquo;</li>
+<li>The <strong>function name</strong> (<code>SUM</code>, <code>VLOOKUP</code>, <code>SUMIF</code>…) is the <em>verb</em>.</li>
+<li>The <strong>arguments</strong>, separated by commas, are its <em>details</em>.</li>
+<li>A <strong>range</strong> like <code>I2:I13</code> means &ldquo;cells I2 through I13, inclusive.&rdquo;</li>
+</ul>
+<p>When an AI hands you a formula, recite it aloud, and if it&rsquo;s longer than a
+line, ask the AI directly:</p>
+<blockquote>
+<p>Please translate this formula into plain English, one step per line:
+<code>=SUMIF(G2:G13,"Gift Sets",I2:I13)</code></p>
+</blockquote>
+<p>You&rsquo;ll get something like:</p>
+<ol>
+<li>Look down the Category column (G2:G13).</li>
+<li>Where the category is exactly &ldquo;Gift Sets&rdquo;…</li>
+<li>…add up the matching row&rsquo;s line total from I2:I13.</li>
+</ol>
+<p>Glance at June&rsquo;s data — Gift Sets are orders 1001, 1004, 1006, 1010 with
+line totals 84.00 + 42.00 + 42.00 + 126.00 — and you&rsquo;ll see the answer
+should be <strong>294.00</strong>. Which is what that formula produces. You just
+<em>verified an AI-written formula by hand.</em> That&rsquo;s the whole chapter in one
+move, and you&rsquo;re more capable than you thought.</p>
+<blockquote>
+<p><strong>Filling down, the honest way</strong></p>
+<p>The formula in <code>I2</code> says <code>=E2*F2</code>. Copy it to I3 and spreadsheets are
+smart enough that it becomes <code>=E3*F3</code> on its own — the references
+&ldquo;shift&rdquo; as you copy. This is called a <em>relative reference</em>, and it&rsquo;s
+usually what you want. When you <em>don&rsquo;t</em> want shifting (see Chapter 3&rsquo;s
+catalog range), the AI will use dollar signs — <code>catalog!$A$2:$B$5</code> —
+which means &ldquo;this exact range, don&rsquo;t shift it.&rdquo; If that sounds abstract,
+no need to master it today; just know <strong>$ pins a reference in place.</strong></p>
+</blockquote>
+<p>Also worth knowing: <strong><code>SUM(A2:A13)</code> that includes a blank cell is fine</strong> —
+blanks count as zero. An error usually means a <em>word</em> got in, not a blank.</p>
+<h2 id="when-it-comes-back-wrong-the-error-glossary">When it comes back wrong: the error glossary</h2>
+<p>Errors look scary and shouty. Read them as <em>polite complaints</em>, each with a
+specific meaning:</p>
+<table>
+<thead>
+<tr>
+<th>You see</th>
+<th>Plain meaning</th>
+<th>Usual first suspect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#NAME?</code></td>
+<td>Spreadsheet doesn&rsquo;t recognize a word you typed</td>
+<td>Misspelled function name, or quotes missing around text</td>
+</tr>
+<tr>
+<td><code>#N/A</code></td>
+<td>&ldquo;I looked for that and found nothing&rdquo;</td>
+<td>Lookup value doesn&rsquo;t exist in the table (Chapter 3&rsquo;s topic)</td>
+</tr>
+<tr>
+<td><code>#REF!</code></td>
+<td>Formula points at a cell that isn&rsquo;t there anymore</td>
+<td>You deleted rows/columns the formula used</td>
+</tr>
+<tr>
+<td><code>#VALUE!</code></td>
+<td>You asked math of a word, or vice versa</td>
+<td>Number stored as text (common with dates — Chapter 5)</td>
+</tr>
+<tr>
+<td><code>#DIV/0!</code></td>
+<td>Divide by zero</td>
+<td>A total in the denominator is 0 or blank</td>
+</tr>
+<tr>
+<td><code>#SPILL!</code> (Excel)</td>
+<td>The formula wants to output multiple cells but they&rsquo;re not empty</td>
+<td>Something stuck in the way</td>
+</tr>
+<tr>
+<td>Err:5xx / Err:52x (LibreOffice)</td>
+<td>Same complaints, different accents</td>
+<td>Same triage</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-fixing-routine-a-conversation-not-a-spell">The fixing routine (a conversation, not a spell)</h2>
+<p>When a formula gives you an error or a number you don&rsquo;t believe, run this
+5-step loop. You run it <em>with the AI</em>, and nothing more is required of you
+than honesty:</p>
+<ol>
+<li><strong>State the intent.</strong> &ldquo;This was supposed to total revenue by category.
+   I expected 294.00 for Gift Sets.&rdquo;</li>
+<li><strong>State the reality.</strong> &ldquo;I got 0.&rdquo; (Or <code>#N/A</code>, or 2,940.00 — say the
+   exact thing you saw.)</li>
+<li><strong>Give the map.</strong> Re-paste your sheet map. AI can&rsquo;t fix formulas it
+   can&rsquo;t see.</li>
+<li><strong>Ask for diagnosis, then a candidate.</strong> &ldquo;What would cause that? Give
+   me a corrected formula to try.&rdquo;</li>
+<li><strong>Ask for a hand check.</strong> &ldquo;How could I verify the answer with just one
+   manual addition?&rdquo;</li>
+</ol>
+<p>Real example from the writing of this book:</p>
+<blockquote>
+<p><strong>You:</strong> My formula <code>=SUMIF(G2:G13,"Gift Sets",I2:I13)</code> returns 0. I
+calculated by hand that Gift Sets should be 84.00 + 42.00 + 42.00 +
+126.00 = 294.00. What&rsquo;s going on?</p>
+<p><strong>AI:</strong> If your line totals are in column I and your categories in G,
+that formula should be right — which means we&rsquo;re likely missing the
+<em>categories</em> matching &ldquo;Gift Sets&rdquo; exactly. Check whether G2:G13 contains
+things like <code>Gift Sets</code> (trailing space), <code>gift sets</code>
+(lowercase), or <code>Gift Set</code> (singular). Tell me what the exact text in
+G2 is.</p>
+</blockquote>
+<p>Notice: the AI didn&rsquo;t just spit a new formula and pray. It made a
+<em>hypothesis</em> and asked you for evidence. That&rsquo;s a good sign your AI is
+being a good collaborator — and exactly how Chapter 8&rsquo;s follow-up loop
+begins.</p>
+<blockquote>
+<p><strong>Why manual checks matter — the self-trust loop</strong></p>
+<p>Every chapter in this book includes a number you can verify by hand
+(like 294.00 above). When a spreadsheet and your own quick check
+agree, that <em>builds</em> trust faster than any tutorial can. When they
+don&rsquo;t agree, you found a real problem while it&rsquo;s still tiny. Either
+way you win. The AI is a fast, patient, occasionally-wrong colleague —
+your hand check is the safety net.</p>
+</blockquote>
+<h2 id="one-formula-at-a-time-in-a-sheet-you-can-undo">One formula at a time, in a sheet you can undo</h2>
+<p>Final practical advice, especially if you&rsquo;re uneasy in spreadsheets:</p>
+<ul>
+<li>Open the copy of the file — never the original — and
+  <strong>duplicate your sheet</strong> (right-click the tab, &ldquo;Duplicate&rdquo;) before big
+  changes. Now mistakes cost nothing.</li>
+<li>Make <strong>one formula at a time</strong>, sanity-check it, then continue.</li>
+<li>If a formula builds on a formula, give the AI the <em>whole stack</em> (&ldquo;I have
+  =E2*F2 in I2, =SUM(I2:I13) in I15, and a =SUMIF in I17&rdquo;) when you ask.</li>
+</ul>
+<p>That&rsquo;s habits, not heroics. On to <a href="03-vlookup.html">Chapter 3</a> and the
+famous one: VLOOKUP.</p>
+</article>
+<footer class="pager"><a href="01-asking-in-plain-english.html">&#8592; 1 · Asking in Plain English</a><a href="03-vlookup.html"> &#8594;3 · VLOOKUP, Without the Fear</a></footer>
+</main>
+<footer class="colophon">
+Spreadsheet Formulas, With a Friend &#8212; a beginner manual by
+<a href="https://dylanasdale.github.io">Asdale Dynamics, LLC</a>.
+Markdown source in <code>docs/</code>; this site rebuilds with
+<code>python3 scripts/build_site.py</code>. No data leaves your machine.
+</footer>
+</body>
+</html>
